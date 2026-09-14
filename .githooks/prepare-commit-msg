@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Keep commit messages attributed only to the repository owner.
+# Drops any Co-authored-by trailers from the commit message.
+MSG_FILE="$1"
+
+if [[ -f "$MSG_FILE" ]]; then
+  tmp="$(mktemp)"
+  grep -viE '^[[:space:]]*Co-authored-by:' "$MSG_FILE" > "$tmp" || true
+  if [[ -s "$tmp" ]]; then
+    mv "$tmp" "$MSG_FILE"
+  else
+    rm -f "$tmp"
+  fi
+fi
+
+exit 0
